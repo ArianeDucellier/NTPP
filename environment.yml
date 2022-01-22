@@ -1,4 +1,4 @@
-name: nttp
+name: ntpp
 channels:
   - conda-forge
   - defaults
