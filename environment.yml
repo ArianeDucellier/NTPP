@@ -11,4 +11,3 @@ dependencies:
   - pytorch=1.4.0
   - scipy
   - tqdm
-  - torchvision
