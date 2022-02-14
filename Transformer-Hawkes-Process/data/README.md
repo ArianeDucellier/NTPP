@@ -51,25 +51,30 @@ There are 5 types of events (taking values from 0 to 4).
 
 No devtest in dictionary.
 
-The train sets contains 5 lists. The length of a list of events is between 20 and 100, with average length 59.9 events.
+Event has keys idx_event, time_since_last_event, time_since_last_same_event, type_event, time_since_start.
 
-The train sets contains 1000 lists. The length of a list of events is between 20 and 100, with average length 61.7 events.
+The train set contains 8000 lists. The length of a list of events is between 53 and 98, with average length 73.8 events.
+
+The dev set contains 5 lists. The length of a list of events is between 34 and 93, with average length 61 events.
+
+The test set contains 5 lists. The length of a list of events is between 32 and 74, with average length 56.2 events.
 
 args is a dictionary containing keys:
-{'NumSeqs': 12000,
- 'DimStates': 32,
- 'MinLen': 20,
- 'PID': 81233,
- 'MaxLen': 100,
- 'DimLSTM': 32,
- 'FilePretrain': None,
- 'DimProcess': 5,
- 'ModelGen': 'conttime',
- 'TIME': '2017-09-27T13:46:44.282072',
- 'FileModel': '/Users/hongyuan/Documents/GitJHU/NeuralHawkesProcess/gen_models/model_ModelGen=conttime_PID=81233_TIME=2017-09-27T13:46:44.282072.pkl',
- 'FileSave': '/Users/hongyuan/Documents/GitJHU/NeuralHawkesProcess/data/data_ModelGen=conttime_PID=81233_TIME=2017-09-27T13:46:44.282072.pkl',
- 'SetParams': False,
- 'Seed': 12345}
+- NumSeqs: 12000
+- DimStates: 32
+- MinLen: 20
+- PID: 81233
+- MaxLen: 100
+- DimLSTM: 32
+- FilePretrain: None
+- DimProcess: 5
+- ModelGen: conttime
+- TIME: 2017-09-27T13:46:44.282072
+- FileModel: /Users/hongyuan/Documents/GitJHU/NeuralHawkesProcess/gen_models/model_ModelGen=conttime_PID=81233_TIME=2017-09-27T13:46:44.282072.pkl
+- FileSave: /Users/hongyuan/Documents/GitJHU/NeuralHawkesProcess/data/data_ModelGen=conttime_PID=81233_TIME=2017-09-27T13:46:44.282072.pkl
+- SetParams: False
+- Seed: 12345
+ 
 ## data_mimic / fold1
 
 There are 75 types of events (taking values from 0 to 72).

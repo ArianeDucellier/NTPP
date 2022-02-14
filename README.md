@@ -16,6 +16,10 @@ conda activate ntpp
 
 conda install pytorch torchvision torchaudio -c pytorch
 
+To use the tutorials from https://d2l.ai/index.html, use the following command:
+
+pip install -U d2l
+s
 The authors also used GPUs to run the code. To run the code on a CPU, change the following lines:
 
 - In Main.py, line 193, modify to:
