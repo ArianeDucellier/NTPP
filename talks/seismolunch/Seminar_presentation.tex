@@ -1,11 +1,8 @@
 % !TEX encoding = UTF-8 Unicode
 \documentclass{beamer}
 
-%\usepackage{amsmath}
-%\usepackage{color}
-%\usepackage{gensymb}
-%\usepackage{hyperref}
-%\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{amssymb}
 
 \usetheme{Warsaw}
 
@@ -23,6 +20,7 @@
 	\end{frame}
 
 	\section{Point processes}
+	\subsection{What is a point process?}
 
 	\begin{frame}
 		\frametitle{What is a point process?}
@@ -34,553 +32,124 @@
 
 		\vspace{1em}
 
-		$\rightarrow$ Ex: A collection of timings of earthquake occurrence.
+		$\rightarrow$ Ex: A collection of timings of earthquake events.
 
 		\vspace{2em}
 
-		For a marked point process, there is also information associated with the timing of the events.
+		For a marked point process, there is also some information associated with the timing of the events.
 
 		\vspace{1em}
 
-		$\rightarrow$ Ex: A collection of timings and magnitudes of earthquakes.
+		$\rightarrow$ Ex: A collection of timings and magnitudes of earthquake events.
 	\end{frame}
 
-	\section{ETAS models}
+	\subsection{Conditional intensity function (CIF)}
+
+	\begin{frame}
+		\frametitle{Conditional intensity function (CIF)}
+		$N_{\delta} \left( t \right)$: Number of events between $t$ and $t + \delta$.
+
+		\vspace{1em}
+
+		$\mathcal{H}_t =  \left\{ (\left( t_i , m_i \right) \forall i : t_i < t \right\} $: Event history up to time $t$.
+
+		\vspace{2em}
+
+		Conditional intensity function ($\sim$ event rate):
+
+		\vspace{1em}
+
+		$\lambda \left( t \mid \mathcal{H}_t \right) = \lim_{\delta \rightarrow 0} Pr \left\{ N_{\delta} \left( t \right) > 0 \mid \mathcal{H}_t \right\}$
+
+		\vspace{2em}
+
+		Our objective: Computing the value of $\lambda \left( t \right)$ knowing the event sequence $\left\{ \left(t_1 , m_1 \right) , \cdots , \left( t_n , m_n \right) \right\}$ between $T_1$ and $T_2$.
+	\end{frame}
+
+	\section{ETAS model}
+	\subsection{Epidemic-Type Aftershock Sequence model}
+
+	\begin{frame}
+		\frametitle{Epidemic-Type Aftershock Sequence (ETAS) model}
+		\begin{itemize}
+			\item Magnitude-frequency distribution law of Gutenberg and Richter: $Pr \left( m_i > m \right) = e^{- \beta \left( m - m_C \right)} \text{ for } m > m_C$.
+			\item Omori-Utsu law of aftershock decay: Number of aftershocks decays as $1 / t^p$.
+			\item Each event, irrespective of whether it is a small or a big event, can trigger its own offspring.
+		\end{itemize}
+
+		\begin{equation*}
+		\lambda \left( t \mid \mathcal{H}_t \right) = \mu + \sum_{i : t_i < t} A e^{\alpha \left( m_i - m_C \right)} \left( 1 + \frac{t - t_i}{c} \right) ^{-p}
+		\end{equation*}		
+	\end{frame}
+
+	\subsection{Fitting an ETAS model}
+
+	\begin{frame}
+		\frametitle{Fitting an ETAS model}
+		Find the parameters $\left( \mu , A , \alpha , c , p \right)$ that maximizes the likelihood:
+
+		\begin{equation*}
+		\begin{aligned}
+		L = & Pr \left\{ \text{The first event occurs between } t_1 \text{ and } t_1 + dt \mid \right. \\
+		& \left. \mathcal{H}_{T_1} \text{ and the first event does not occur between } T_1 \text{ and } t_1 \right\} * \\
+		& Pr \left\{ \text{The second event occurs between } t_2 \text{ and } t_2 + dt \mid \right. \\
+		& \left. \mathcal{H}_{t_1} \text{ and the second event does not occur between } t_1 \text{ and } t_2 \right\} * \\
+		& \cdots \\
+		& Pr \left\{ \text{The last event occurs between } t_n \text{ and } t_n + dt \mid \right. \\
+		& \left. \mathcal{H}_{t_{n - 1}} \text{ and the last event does not occur between } t_{n - 1} \text{ and } t_n \right\}
+		\end{aligned}
+    		\end{equation*}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Fitting an ETAS model}
+		Find the parameters $\left( \mu , A , \alpha , c , p \right)$ that maximizes the log-likelihood:
+
+		\begin{equation*}
+		l = \sum_{i : T_1 \leq t_i \leq T_2} \log \lambda \left( t \mid \mathcal{H}_{t_i} \right) - \int_{T_1}^{T_2} \lambda \left( t \mid \mathcal{H}_t \right) dt
+    		\end{equation*}
+	\end{frame}
+
+	\subsection{Goodness of fit}
+
+	\begin{frame}
+		\frametitle{Goodness of fit of ETAS model}
+		Residual process:
+
+		\vspace{1em}
+
+		Transform times $\tau_i = \int_{T_1}^{t_i} \hat{\lambda} \left( t \mid \mathcal{H}_t \right) dt$ where $\hat{\lambda}$ is the fitted conditional intensity function.
+
+		\vspace{2em}
+
+		Plot $\tau_i$ as a function of $i$. There is a good fit if the points follow the straight line $y = x$.
+
+		\vspace{1em}
+
+		Plot $\tau_i - i$ as a function of $i$. There is a good fit if the points are horizontally aligned.
+	\end{frame}
+
+	\subsection{Results}
+
+	\begin{frame}
+		\frametitle{Example on an LFE family using R package PtProcess}
+		\vspace{1em}
+		\includegraphics[trim={0cm 0cm 0cm 0cm}, clip, width=11cm]{gif_residuals_PtProcess.eps}
+		\btVFill
+		\tiny{LFE catalog from Chestler and Creager (2017).}
+	\end{frame}
 
 	\section{Neural networks for point processes}
 
-%	\begin{frame}
-%		\frametitle{What is a Low Velocity Zone (LVZ)?}
-%		\begin{itemize}
-%			\item LVZ = Landward dipping layer with low S-wave velocity, detected in many subduction zones
-%
-%			\vspace{2em}
-%
-%			\item Low S-wave velocity and high $V_P / V_S$ ratio are indicators of high pore-fluid pressure
-%		\end{itemize}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{LVZ in northern Cascadia}
-%		\begin{center}
-%			\includegraphics[width=10cm, trim={6cm 3.8cm 5cm 9cm}, clip]{Figures/Nicholson_al_2005.png}
-%
-%			Figure from Nicholson \textit{et al.}, 2005.
-%		\end{center}
-%		\btVFill
-%		\tiny{Nicholson T., Bostock M.G., Cassidy J.F. (2005). \textit{GJI}, \textbf{131}, pp 849-859.}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{LVZ close to the source of tremor and LFEs}
-%		\begin{center}
-%			\includegraphics[width=10cm]{Figures/ETS_LVZ_location.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{LVZ close to the source of tremor and LFEs}
-%		\begin{itemize}
-%			\item Fluids are thought to play an auxiliary role in the generation of tectonic tremor and LFEs, by altering the conditions on the plate interface to enable transient slip events, without generating seismic waves directly.
-%
-%			\vspace{1em}
-%
-%			\item As the sources of the tectonic tremor are very close to the LVZ, seismic waves recorded during tectonic tremor episodes should illuminate the area with great precision.
-%		\end{itemize}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Research objective}
-%		\begin{huge}
-%			\begin{center}
-%				Inverting for the seismic wave velocity in the subducted oceanic crust using seismic recordings of tectonic tremor
-%			\end{center}
-%		\end{huge}
-%	\end{frame}
-
-%	\subsection{Fluids in subduction zones}
-%
-%	\begin{frame}
-%		\frametitle{Slip along the plate boundary}
-%		\begin{center}
-%			\includegraphics[width=11cm]{Figures/subduction_0.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Hydration of upper oceanic crust}
-%		\begin{center}
-%			\includegraphics[width=11cm]{Figures/subduction_1.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Incorporation of water within hydrous minerals}
-%		\begin{center}
-%			\includegraphics[width=11cm]{Figures/subduction_2.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Reactivation of faults in the trench/outer-rise region}
-%		\begin{center}
-%			\includegraphics[width=11cm]{Figures/subduction_3.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Metamorphic dehydration $\rightarrow$ High pore-fluid pressure}
-%		\begin{center}
-%			\includegraphics[width=11cm]{Figures/subduction_4.eps}
-%		\end{center}
-%	\end{frame}
-%	
-%	\begin{frame}
-%		\frametitle{Onset of eclogitization - Serpentinization of mantle wedge}
-%		\begin{center}
-%			\includegraphics[width=11cm]{Figures/subduction_5.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Completion of eclogitization}
-%		\begin{center}
-%			\includegraphics[width=11cm]{Figures/subduction_6.eps}
-%		\end{center}
-%	\end{frame}
-
-%	\section{Data}
-%
-%	\begin{frame}
-%		\frametitle{Cascadia Array of Arrays}
-%		\begin{columns}[c]
-%			\begin{column}{6cm}
-%				\begin{itemize}
-%					\item Cascadia Array of Arrays experiment (2009-2010)
-%
-%					\vspace{1em}
-%
-%					\item Eight arrays of seismic stations in the Olympic Peninsula
-%
-%					\vspace{1em}
-%
-%					\item Recorded the main ETS event in August 2010
-%
-%					\vspace{1em}
-%
-%					\item Tremor located just under the arrays
-%				\end{itemize}
-%			\end{column}
-%			\begin{column}{6cm}
-%				\begin{center}
-%					\includegraphics[trim={1cm 4cm 1.5cm 9cm}, clip, width=6cm]{Figures/arrays_location.eps}
-%				\end{center}
-%			\end{column}
-%		\end{columns}
-%
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Tremor catalog}
-%		\begin{itemize}
-%			\vspace{1em}
-%
-%			\item 28902 one-minute-long time windows where tectonic tremor is recorded
-%
-%			\vspace{1em}
-%
-%			\item For each tremor window: Beginning time, latitude, longitude, and depth of the tremor source
-%
-%			\vspace{1em}
-%
-%			\item Start date: June 20\textsuperscript{th} 2009
-%
-%			\vspace{1em}
-%
-%			\item End date: September 30\textsuperscript{th} 2010
-%		\end{itemize}
-%		\btVFill
-%		\tiny{Ghosh A., Vidale J.E., Creager K.C. (2012). \textit{JGR}, \textbf{117}, B10301.}
-%	\end{frame}
-%
-%	\section{Method}
-%
-%	\subsection{Cross-correlation and autocorrelation}
-%
-%	\begin{frame}
-%		\frametitle{Horizontal and Vertical component}
-%		\begin{figure}[t]
-%		\centering
-%			\includegraphics[height=5cm]{Figures/seismicwaves_cc.eps}
-%		\end{figure}
-%
-%		$\rightarrow$ P-wave on the vertical component, S-wave on the horizontal component, Signal-to-Noise Ratio = 1
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Cross-correlation}
-%		\begin{figure}[t]
-%		\centering
-%			\includegraphics[height=5cm]{Figures/crosscorrelation.eps}
-%		\end{figure}
-%
-%		$\rightarrow$ We can still see a peak at the time lag between the arrival of the P-wave and the arrival of the S-wave
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Direct and reflected waves}
-%		\begin{figure}[t]
-%		\centering
-%			\includegraphics[height=5cm]{Figures/seismicwaves_ac.eps}
-%		\end{figure}
-%
-%		$\rightarrow$ Direct wave and reflected wave on the same component, Signal-to-Noise Ratio = 1
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Autocorrelation}
-%		\begin{figure}[t]
-%		\centering
-%			\includegraphics[height=5cm]{Figures/autocorrelation.eps}
-%		\end{figure}
-%
-%		$\rightarrow$ We can still see a peak at the time lag between the arrival of the direct wave and the arrival of the reflected wave
-%	\end{frame}
-%
-%	\subsection{Proposed model}
-%
-%	\begin{frame}
-%		\frametitle{Proposed model for the velocity structure}
-%		\begin{center}
-%			\includegraphics[width=10cm]{Figures/current_model_detailed.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\subsection{Expected ray paths}
-%
-%	\begin{frame}
-%		\frametitle{Direct P-wave and direct S-wave}
-%		\begin{center}
-%			\includegraphics[width=8cm]{Figures/directPdirectS.eps}
-%		\end{center}
-%
-%		$\rightarrow$ On the horizontal-to-vertical cross-correlation
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Direct P-wave and reflected P-wave (off the mid-slab)}
-%		\begin{center}
-%			\includegraphics[width=8cm]{Figures/directPreflectedP_midslab.eps}
-%		\end{center}
-%
-%		$\rightarrow$ On the vertical autocorrelation
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Direct P-wave and reflected P-wave (off the Moho)}
-%		\begin{center}
-%			\includegraphics[width=8cm]{Figures/directPreflectedP_Moho.eps}
-%		\end{center}
-%
-%		$\rightarrow$ On the vertical autocorrelation
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Direct S-wave and reflected P-wave (off the mid-slab)}
-%		\begin{center}
-%			\includegraphics[width=8cm]{Figures/directSreflectedP_midslab.eps}
-%		\end{center}
-%
-%		$\rightarrow$ On the horizontal-to-vertical cross-correlation
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Direct S-wave and reflected P-wave (off the Moho)}
-%		\begin{center}
-%			\includegraphics[width=8cm]{Figures/directSreflectedP_Moho.eps}
-%		\end{center}
-%
-%		$\rightarrow$ On the horizontal-to-vertical cross-correlation
-%	\end{frame}
-%
-%	\section{Results}
-%
-%	\subsection{Example from the Big Skidder array}
-%
-%	\begin{frame}
-%		\frametitle{Two hours of seismic recordings}
-%		\begin{itemize}
-%			\item Seismograms recorded at the Big Skidder array on August 17 2010 from 6am to 8am
-%			\item Divide into 240 thirty-second-long time windows
-%			\item For each time window:
-%			\begin{itemize}
-%				\item For each station, cross-correlate the horizontal component with the vertical component
-%				\item Stack (linearly) the cross-correlation over all the stations of the array
-%			\end{itemize}
-%			\item Plot the stacked cross-correlation as a function of time
-%		\end{itemize}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Two hours of seismic recordings}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={6cm 1.5cm 5cm 3.5cm}, clip]{Figures/BS_2010_8_17_6_lin.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Tremor located just under the array}
-%		\begin{itemize}
-%			\item Tectonic tremor recorded at the Big Skidder array and which source is located in a 5x5 km cell just under the array
-%			\item 70 one-minute-second-long time windows
-%			\item For each time window:
-%			\begin{itemize}
-%				\item For each station, cross-correlate the horizontal component with the vertical component
-%				\item Stack (linearly) the cross-correlation over all the stations of the array
-%			\end{itemize}
-%			\item Plot all the 70 stacked cross-correlation
-%			\item Stack the 70 signals with a linear, power, or phase-weighted stack
-%		\end{itemize}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Tremor located just under the array}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={5cm 2cm 5cm 3.5cm}, clip]{Figures/BS_000_000_lin.eps}
-%		\end{center}
-%	\end{frame}
-%		
-%	\subsection{Clustering of time windows}
-%
-%	\begin{frame}
-%		\frametitle{Good or bad time window?} 
-%		Does the cross-correlation for a given one-minute-long time windows look like the stack over all time windows?
-%
-%		\begin{itemize}
-%			\item Ratio RMS between 4 and 6 s / RMS between 12 and 14 s
-%			\item Cross-correlation between one cross-correlation and the stack:
-%			\begin{itemize}
-%				\item Maximum cross-correlation value
-%				\item Cross-correlation at time lag 0
-%				\item Time lag corresponding to the maximum cross-correlation value
-%			\end{itemize}
-%		\end{itemize}
-%
-%		$\rightarrow$ K-means clustering $\rightarrow$ Two clusters (good time windows / bad time windows)
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Two clusters (with phase-weighted stack)}
-%		\begin{center}
-%			\includegraphics[width=7.5cm, trim={5cm 2.5cm 5cm 4cm}, clip]{Figures/BS_000_000_PWS_PWS_cluster_ccwin.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Stacked cross-correlations}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={4.5cm 2.5cm 5cm 4cm}, clip]{Figures/BS_000_000_PWS_PWS_cluster_stackcc.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{Stacked vertical autocorrelation}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={4.5cm 2.5cm 5cm 38.3cm}, clip]{Figures/BS_000_000_PWS_PWS_cluster_stackac.eps}
-%		\end{center}
-%	\end{frame}
-%		
-%	\subsection{Velocity structure models}
-%
-%	\begin{frame}
-%		\frametitle{LVZ with strong velocity contrast}
-%		\begin{footnotesize}
-%		\begin{tabular}{| l | c | c | c | c |}
-%			\hline
-%			Layer & $V_P$ (m/s) & $V_S$ (m/s) & $\rho$ (kg/m\textsuperscript{3}) & Thickness (m) \\
-%			\hline
-%			Continental crust & 7100 & 4099 & 2846 & - \\
-%			Upper oceanic crust & 4600 & 1949 & 2700 & 3300 \\
-%			Lower oceanic crust & 7000 & 3400 & 3000 & 3700 \\
-%			Oceanic mantle & 8000 & 4600 & 2932 & - \\
-%			\hline
-%		\end{tabular}
-%		\end{footnotesize}
-%
-%		\vspace{2em}
-%
-%		Time lag between direct P and direct S waves = 4.28 s
-%
-%		Time lag between reflected P and direct S waves = 2.84 s
-%
-%		Time lag between direct P and reflected P waves= 1.43 s
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{LVZ with weaker velocity contrast}
-%		\begin{footnotesize}
-%		\begin{tabular}{| l | c | c | c | c |}
-%			\hline
-%			Layer & $V_P$ (m/s) & $V_S$ (m/s) & $\rho$ (kg/m\textsuperscript{3}) & Thickness (m) \\
-%			\hline
-%			Continental crust & 6200 & 3450 & 2751 & - \\
-%			Upper oceanic crust & 4800 & 2133 & 2700 & 3300 \\
-%			Lower oceanic crust & 7000 & 3400 & 3000 & 3700 \\
-%			Oceanic mantle & 8000 & 4600 & 2932 & - \\
-%			\hline
-%		\end{tabular}
-%		\end{footnotesize}
-%
-%		\vspace{2em}
-%
-%		Time lag between direct P and direct S waves = 5.33 s
-%
-%		Time lag between reflected P and direct S waves = 3.96 s
-%
-%		Time lag between direct P and reflected P waves= 1.37 s
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{No LVZ - High velocities in continental crust}
-%		\begin{footnotesize}
-%		\begin{tabular}{| l | c | c | c | c |}
-%			\hline
-%			Layer & $V_P$ (m/s) & $V_S$ (m/s) & $\rho$ (kg/m\textsuperscript{3}) & Thickness (m) \\
-%			\hline
-%			Continental crust & 7100 & 4099 & 2846 & - \\
-%			Oceanic crust & 7000 & 3400 & 3000 & 7000 \\
-%			Oceanic mantle & 8000 & 4600 & 2932 & - \\
-%			\hline
-%		\end{tabular}
-%		\end{footnotesize}
-%
-%		\vspace{2em}
-%
-%		Time lag between direct P and direct S waves = 4.28 s
-%
-%		Time lag between reflected P and direct S waves = 2.28 s
-%
-%		Time lag between direct P and reflected P waves= 2.0 s
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{No LVZ - Lower velocities in continental crust}
-%		\begin{footnotesize}
-%		\begin{tabular}{| l | c | c | c | c |}
-%			\hline
-%			Layer & $V_P$ (m/s) & $V_S$ (m/s) & $\rho$ (kg/m\textsuperscript{3}) & Thickness (m) \\
-%			\hline
-%			Continental crust & 6200 & 3450 & 2751 & - \\
-%			Oceanic crust & 7000 & 3400 & 3000 & 7000 \\
-%			Oceanic mantle & 8000 & 4600 & 2932 & - \\
-%			\hline
-%		\end{tabular}
-%		\end{footnotesize}
-%
-%		\vspace{2em}
-%
-%		Time lag between direct P and direct S waves = 5.33 s
-%
-%		Time lag between reflected P and direct S waves = 3.34 s
-%
-%		Time lag between direct P and reflected P waves= 2.0 s
-%	\end{frame}
-%
-%	\subsection{Other locations of the tremor source}
-%
-%	\begin{frame}
-%		\frametitle{5 km southwest of the array}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={4.5cm 2.5cm 5cm 4cm}, clip]{Figures/BS_-05_-05_PWS_PWS_cluster_stackcc.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{5 km  west of the array}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={4.5cm 2.5cm 5cm 4cm}, clip]{Figures/BS_-05_000_PWS_PWS_cluster_stackcc.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{5 km  northwest of the array}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={4.5cm 2.5cm 5cm 4cm}, clip]{Figures/BS_-05_005_PWS_PWS_cluster_stackcc.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{5 km  south of the array}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={4.5cm 2.5cm 5cm 4cm}, clip]{Figures/BS_000_-05_PWS_PWS_cluster_stackcc.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{5 km  north of the array}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={4.5cm 2.5cm 5cm 4cm}, clip]{Figures/BS_000_005_PWS_PWS_cluster_stackcc.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{5 km  southeast of the array}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={4.5cm 2.5cm 5cm 4cm}, clip]{Figures/BS_005_-05_PWS_PWS_cluster_stackcc.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{5 km  east of the array}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={4.5cm 2.5cm 5cm 4cm}, clip]{Figures/BS_005_000_PWS_PWS_cluster_stackcc.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\begin{frame}
-%		\frametitle{5 km  northeast of the array}
-%		\begin{center}
-%			\includegraphics[width=8cm, trim={4.5cm 2.5cm 5cm 4cm}, clip]{Figures/BS_005_005_PWS_PWS_cluster_stackcc.eps}
-%		\end{center}
-%	\end{frame}
-%
-%	\section{Conclusion}
-%
-%	\begin{frame}
-%		\frametitle{Conclusion}
-%		\begin{itemize}
-%			\item In nearly all cases, we see a peak in the horizontal-to-vertical cross-correlation at the time lag between the arrival of the direct P-wave and the arrival of the direct S-wave.
-%
-%			\vspace{1em}
-%
-%			\item In several cases, we see a secondary peak which could correspond to the time lag between the direct S-wave and a P-wave reflected on the mid-slab discontinuity or the Moho.
-%
-%			\vspace{1em}
-%
-%			\item The peaks are less obvious or inexistent when there are fewer time windows with recorded tremor.
-%
-%			\vspace{1em}
-%
-%			\item We now need to do the same analysis for other locations of the tremor source, and the seven other arrays.
-%		\end{itemize}
-%	\end{frame}
-%
-%	\begin{frame}[allowframebreaks]
-%		\frametitle{Summary}
-%		\begin{itemize}
-%			\item Low Velocity Zone (LVZ) in many subduction zones = Low $V_S$, high $V_P / V_S$ $\rightarrow$ High pore fluid pressure
-%			\item Sources of tectonic tremor located on the plate boundary $\rightarrow$ Very close to the LVZ $\rightarrow$ Seismic imaging with great precision
-%			\item Research objective: Inverting for the seismic wave velocity in the subducted oceanic crust using recording of tectonic tremor
-%			\item Data = Eight arrays of seismic stations in the Olympic Peninsula, Washington; one year of recordings
-%			\item Two sharp velocity contrasts: Mid-oceanic crust and Moho
-%			\item Tremor on the plate boundary $\rightarrow$ Generation of direct P- and S-waves + Reflected P-wave on the mid-slab and the Moho
-%			\item Cross-correlation between horizontal and vertical components $\rightarrow$ Peak at the time lag between direct P and direct S waves
-%			\item Clustering of good and bad time windows $\rightarrow$ Secondary peaks on the cross-correlation (direct S and reflected P-waves?) and the vertical autocorrelation (direct P and reflected P-waves?)
-%			\item Future work: Data processing for more locations of the tremor source and all the other arrays
-%			\item Ultimate goal of the project: Inversion of seismic wave velocity in the subducted oceanic crust $\rightarrow$ Detecting the presence of water $\rightarrow$ Better understanding of mechanism of ETS and of subduction zone processes
-%		\end{itemize}
-%	\end{frame}
-
+	\begin{frame}
+		\frametitle{More about ETAS and NTPP}
+		\begin{itemize}
+			\item CORSSA
+			\item Technical session at SSA meeting: New Developments in Physics- and Statistics-based Earthquake Forecasting oral session (Friday 10am to 11:15 am)
+			\item Olksandr Shchur blog
+		\end{itemize}
+	\end{frame}
+		
 	\begin{frame}
 		\begin{Huge}
 			\begin{center}

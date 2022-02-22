@@ -1,4 +1,10 @@
-\beamer@endinputifotherversion {3.33pt}
+\beamer@endinputifotherversion {3.36pt}
 \beamer@sectionintoc {1}{Point processes}{2}{0}{1}
-\beamer@sectionintoc {2}{ETAS models}{3}{0}{2}
-\beamer@sectionintoc {3}{Neural networks for point processes}{3}{0}{3}
+\beamer@subsectionintoc {1}{1}{What is a point process?}{2}{0}{1}
+\beamer@subsectionintoc {1}{2}{Conditional intensity function (CIF)}{3}{0}{1}
+\beamer@sectionintoc {2}{ETAS model}{4}{0}{2}
+\beamer@subsectionintoc {2}{1}{Epidemic-Type Aftershock Sequence model}{4}{0}{2}
+\beamer@subsectionintoc {2}{2}{Fitting an ETAS model}{5}{0}{2}
+\beamer@subsectionintoc {2}{3}{Goodness of fit}{7}{0}{2}
+\beamer@subsectionintoc {2}{4}{Results}{8}{0}{2}
+\beamer@sectionintoc {3}{Neural networks for point processes}{9}{0}{3}
