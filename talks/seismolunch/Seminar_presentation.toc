@@ -1,0 +1,4 @@
+\beamer@endinputifotherversion {3.33pt}
+\beamer@sectionintoc {1}{Point processes}{2}{0}{1}
+\beamer@sectionintoc {2}{ETAS models}{3}{0}{2}
+\beamer@sectionintoc {3}{Neural networks for point processes}{3}{0}{3}
