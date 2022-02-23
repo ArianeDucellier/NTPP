@@ -3,6 +3,7 @@
 
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{hyperref}
 
 \usetheme{Warsaw}
 
@@ -142,11 +143,63 @@
 	\section{Neural networks for point processes}
 
 	\begin{frame}
+		\frametitle{First step: Encoding the timings of the events}
+		Timing $t_j$ of earthquake event is transformed into a vector $y_j$:
+
+		\vspace{2em}
+
+		\begin{itemize}
+			\item Inter-event times: $y_j = t_j - t_{j - 1}$ or $y_j = \log \left( t_j - t_{j - 1} \right)$.
+
+			\vspace{1em}
+
+			\item Decomposition into a sum of $M$ cosine and sine functions: $y_j$ is the vector of the $M$ weights associated.
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Second step: Encode the history of the process}
+		The hidden state $h_i$ contains all the history of the process until time $t_i$.
+
+		\vspace{2em}
+
+		\begin{itemize}
+			\item Update at each time step $h_{i + 1} = f \left( h_i , y_i \right)$.
+
+			\vspace{1em}
+
+			\item Encode the history of all events together: $H = f \left( y_1 , y_2 , \cdots , y_n \right)$
+		\end{itemize}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Third step: Use the hidden states to get the conditional intensity function}
+
+		\begin{itemize}
+			\item Parametric density function: $\lambda \left( \tau_i \right) = f \left( \tau_i , \theta_i \right)$ and $\theta_i = \sigma \left( W h_i + b \right)$.
+
+			\vspace{1em}
+
+			\item Non parametric: $\lambda \left( \tau_i \right) = f \left( W h_i + b \right)$.
+		\end{itemize}
+
+		\vspace{2em}
+
+		Compute the loss function $l = - \sum_{i = 1}^n \log \lambda \left( t_i \right) + \int_0^T \lambda \left( t \right) dt$ and minimize it using a gradient method.
+	\end{frame}
+		
+	\begin{frame}
 		\frametitle{More about ETAS and NTPP}
 		\begin{itemize}
-			\item CORSSA
+			\item CORSSA website: \url{http://www.corssa.org/en/home/}
+
+			\vspace{1em}
+
 			\item Technical session at SSA meeting: New Developments in Physics- and Statistics-based Earthquake Forecasting oral session (Friday 10am to 11:15 am)
-			\item Olksandr Shchur blog
+
+			\vspace{1em}
+
+			\item Oleksandr Shchur blog: \url{https://shchur.github.io/blog/}
 		\end{itemize}
 	\end{frame}
 		
