@@ -1,5 +1,7 @@
 # NTPP
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ArianeDucellier/NTPP.git/HEAD?labpath=https%3A%2F%2Fgithub.com%2FArianeDucellier%2FNTPP%2Fblob%2Fmain%2Fnotebooks%2Fshchur_phuket.ipynb)
+
 The objective of this project is to model earthquake catalogs as point processes using neural networks. With this, we hope to be able to predict the ground intensity function for the next few hours or days. What would be nice to predict is whether LFEs / tremors are going to stop or increase in activity, and in which direction the tremor front is going next.
 
 We use the transformer Hawkes process code from Simiao Zuo et al. (2020):
